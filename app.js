@@ -53,8 +53,6 @@ app.post('/interactions', async function (req, res) {
 
             const [productName, price] = await getProductAmazon(url);
 
-            // tempDB.push({ id: id, productName: productName, price: price, url: url, user_id: userID, channel_id: channel_id });
-            // console.log(tempDB);
             sqlDB.insertData(userID, productName, url, price, channel_id);
 
             await DiscordRequest(`webhooks/${process.env.APP_ID}/${token}/messages/@original`, {
