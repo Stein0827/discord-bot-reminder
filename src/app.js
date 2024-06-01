@@ -45,16 +45,21 @@ app.post('/interactions', async function (req, res) {
         // price reminder command
         if (name == 'pricereminder' && id) {
             const url = req.body.data.options[0].value;
+            
+            // sends a pending message
             await DiscordRequest(`interactions/${id}/${token}/callback`, {
                 method: 'POST', body: {
                     type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
                 }
             });
 
+            // scrapes the web page to get name and price of product
             const [productName, price] = await getProductAmazon(url);
-
+            
+            // inserts data into database
             sqlDB.insertData(userID, productName, url, price, channel_id);
-
+            
+            // updates the loading message with a subsription confirmation
             await DiscordRequest(`webhooks/${process.env.APP_ID}/${token}/messages/@original`, {
                 method: 'PATCH', body:
                 {

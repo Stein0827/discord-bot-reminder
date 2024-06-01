@@ -7,7 +7,8 @@ import {
     ButtonStyleTypes,
   } from 'discord-interactions';
 
-
+// TODO finish the discord request given time interval to check prices
+// TODO integrate database with this discord request message
 await DiscordRequest(`channels/1245920549239128176/messages`, {
     method: 'POST', 
     body: {
