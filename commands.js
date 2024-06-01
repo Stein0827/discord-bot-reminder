@@ -24,6 +24,21 @@ const TEST_COMMAND = {
   type: 1,
 };
 
+
+const NEW_COMMAND = {
+  name: 'pricereminder',
+  description: 'reminds you the price of the product',
+  options: [
+    {
+      type: 3,
+      name: 'link',
+      description: 'link to the product',
+      required: true,
+    },
+  ],
+  type: 1,
+};
+
 // Command containing options
 const CHALLENGE_COMMAND = {
   name: 'challenge',
@@ -40,6 +55,6 @@ const CHALLENGE_COMMAND = {
   type: 1,
 };
 
-const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND];
+const ALL_COMMANDS = [TEST_COMMAND, CHALLENGE_COMMAND, NEW_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

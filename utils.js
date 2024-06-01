@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
 import { verifyKey } from 'discord-interactions';
+import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 export function VerifyDiscordRequest(clientKey) {
   return function (req, res, buf, encoding) {
@@ -59,4 +61,23 @@ export function getRandomEmoji() {
 
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
+export async function getProductAmazon(url) {
+  try {
+    const res = await axios.get(url)
+    const html = res.data;
+    let $ = cheerio.load(html);
+    const title = $('title').text();
+    let priceDiv;
+    priceDiv = $('div.a-section.a-spacing-none.aok-align-center.aok-relative').html();
+
+    $ = cheerio.load(priceDiv);
+    const price = parseFloat($('span.a-price-whole').text().replace(/,/g, '') + $('span.a-price-fraction').text());
+    return [title, price];
+  } 
+  catch(error) {
+    throw(error);
+  }
 }

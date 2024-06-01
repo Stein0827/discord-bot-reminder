@@ -9,7 +9,10 @@ import {
 } from 'discord-interactions';
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
+import { getProductAmazon } from './utils.js';
 
+
+let tempDB = [];
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -26,7 +29,6 @@ const activeGames = {};
 app.post('/interactions', async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
-
   /**
    * Handle verification requests
    */
@@ -54,7 +56,7 @@ app.post('/interactions', async function (req, res) {
     }
     // "challenge" command
     if (name === 'challenge' && id) {
-      const userId = req.body.user.id;
+      const userId = req.body.member.user.id;
       // User's object choice
       const objectName = req.body.data.options[0].value;
 
@@ -79,6 +81,35 @@ app.post('/interactions', async function (req, res) {
                   custom_id: `accept_button_${req.body.id}`,
                   label: 'Accept',
                   style: ButtonStyleTypes.PRIMARY,
+                },
+              ],
+            },
+          ],
+        },
+      });
+    }
+
+    if (name == 'pricereminder' && id) {
+      const url = req.body.data.options[0].value;
+      const [productName, price] = await getProductAmazon(url);
+
+      tempDB.push({id: id, productName: productName, price: price, url: url});
+      console.log(tempDB);
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          // Fetches a random emoji to send from a helper function
+          content: `Subscribed to ${productName}, current product price is : ${price}`,
+          components: [
+            {
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: MessageComponentTypes.BUTTON,
+                  // Append the game ID to use later on
+                  label: 'Link to product',
+                  style: ButtonStyleTypes.LINK,
+                  url: url,
                 },
               ],
             },
@@ -134,7 +165,7 @@ app.post('/interactions', async function (req, res) {
 
       if (activeGames[gameId]) {
         // Get user ID and object choice for responding user
-        const userId = req.body.user.id;
+        const userId = req.body.member.user.id;
         const objectName = data.values[0];
         // Calculate result from helper function
         const resultStr = getResult(activeGames[gameId], {

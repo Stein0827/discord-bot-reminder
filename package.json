@@ -1,7 +1,7 @@
 {
-  "name": "bruh",
+  "name": "price_tracker",
   "version": "1.0.0",
-  "description": "Discord example app",
+  "description": "Discord price tracker app",
   "main": "app.js",
   "type": "module",
   "engines": {
@@ -15,6 +15,8 @@
   "author": "Shay DeWael",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
     "discord-interactions": "^3.2.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
