@@ -9,7 +9,7 @@ import {
 } from 'discord-interactions';
 import { VerifyDiscordRequest, DiscordRequest } from './utils.js';
 import { getProductAmazon } from './utils.js';
-import { db } from './dbschema.js';
+import { DatabaseClient } from './dbclass.js';
 
 
 // Create an express app
@@ -18,7 +18,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
-const sqlDB = new db();
+const sqlDB = new DatabaseClient();
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
