@@ -23,6 +23,8 @@ const sqlDB = new DatabaseClient();
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
+// TODO add new commands to delete a subscription
+// TODO rename the current pricetracking command to something more sensible
 app.post('/interactions', async function (req, res) {
     // Interaction type and data
     const { type, id, data, token, channel_id } = req.body;
