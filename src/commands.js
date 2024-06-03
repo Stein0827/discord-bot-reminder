@@ -9,7 +9,7 @@ const TEST_COMMAND = {
   type: 1,
 };
 
-
+// TODO rename the current pricetracking command to something more sensible like subscribe
 const PRICE_REMINDER = {
   name: 'pricereminder',
   description: 'reminds you the price of the product',

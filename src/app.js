@@ -23,8 +23,8 @@ const sqlDB = new DatabaseClient();
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-// TODO add new commands to delete a subscription
-// TODO rename the current pricetracking command to something more sensible
+// TODO add new command to unsubscribe
+// TODO add new command to list subscribed products from user
 app.post('/interactions', async function (req, res) {
     // Interaction type and data
     const { type, id, data, token, channel_id } = req.body;
@@ -52,6 +52,7 @@ app.post('/interactions', async function (req, res) {
             await DiscordRequest(`interactions/${id}/${token}/callback`, {
                 method: 'POST', body: {
                     type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+                    flags: 6,
                 }
             });
 

@@ -38,6 +38,48 @@ export class DatabaseClient {
         }
     }
 
+    // Function to fetch products for one user
+    async getDataByUser(userID) {
+        const client = await this.pool.connect();
+
+        try {
+            const query = `
+                SELECT * FROM productRecords
+                WHERE userid = $1;
+            `;
+
+            const values = [userID];
+            const res = await client.query(query, values);
+            return res.rows;
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        } finally {
+            client.release(); // Release the client back to the pool
+        }
+    }
+
+    // Function to delete a product record
+    async deleteData(userID, productName, url) {
+        const client = await this.pool.connect();
+
+        try {
+            const query = `
+                DELETE FROM productRecords
+                WHERE userid = $1 AND productname = $2 AND link = $3;
+            `;
+
+            const values = [userID, productName, url];
+            await client.query(query, values);
+
+        } catch (error) {
+            console.error('Error deleting data:', error);
+        } finally {
+            client.release(); // Release the client back to the pool
+        }
+    }
+
     async end() {
         await this.pool.end();
     }
