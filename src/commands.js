@@ -9,10 +9,10 @@ const TEST_COMMAND = {
   type: 1,
 };
 
-// TODO rename the current pricetracking command to something more sensible like subscribe
-const PRICE_REMINDER = {
-  name: 'pricereminder',
-  description: 'reminds you the price of the product',
+// subscribe command
+const SUBSCRIBE_COMMAND = {
+  name: 'subscribe',
+  description: 'subscribe to a product for price tracking',
   options: [
     {
       type: 3,
@@ -25,6 +25,30 @@ const PRICE_REMINDER = {
 };
 
 
-const ALL_COMMANDS = [TEST_COMMAND, PRICE_REMINDER];
+// command to list all subscription
+const LIST_SUBSCRIPTION_COMMAND = {
+  name: 'list',
+  description: 'get a list of your subscribed products',
+  type: 1,
+};
+
+// command to delete a subscription
+const UNSUBSCRIBE_COMMAND = {
+  name: 'unsubscribe',
+  description: 'unsubscribe to a product for price tracking',
+  options: [
+    {
+      type: 3,
+      name: 'name',
+      description: 'name of the product',
+      required: true,
+    },
+  ],
+  type: 1,
+};
+
+
+
+const ALL_COMMANDS = [TEST_COMMAND, SUBSCRIBE_COMMAND, UNSUBSCRIBE_COMMAND, LIST_SUBSCRIPTION_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

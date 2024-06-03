@@ -25,7 +25,7 @@ export class DatabaseClient {
             const query = `
                 INSERT INTO productRecords (userid, productname, link, price, channelID)
                 VALUES ($1, $2, $3, $4, $5)
-                ON CONFLICT (userid, productname, link) DO NOTHING;
+                ON CONFLICT (userid, productname) DO NOTHING;
             `;
 
             const values = [userID, productName, url, price, channel_id];
@@ -47,9 +47,10 @@ export class DatabaseClient {
                 SELECT * FROM productRecords
                 WHERE userid = $1;
             `;
-
+            console.log("it's running right");
             const values = [userID];
             const res = await client.query(query, values);
+            console.log(res);
             return res.rows;
 
         } catch (error) {

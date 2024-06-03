@@ -6,7 +6,7 @@ create table productRecords (
     price float not null,
     channelID text not null,
     link text not null,
-    CONSTRAINT unique_user_product_link UNIQUE (userid, productname, link)
+    CONSTRAINT unique_user_product_link UNIQUE (userid, productname)
 );
 
 

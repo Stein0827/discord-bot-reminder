@@ -23,13 +23,11 @@ const sqlDB = new DatabaseClient();
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
-// TODO add new command to unsubscribe
-// TODO add new command to list subscribed products from user
+// TODO implement new command to unsubscribe
 app.post('/interactions', async function (req, res) {
     // Interaction type and data
     const { type, id, data, token, channel_id } = req.body;
     const userID = req.body.member.user.id;
-    console.log(req.body);
     /**
      * Handle verification requests
      */
@@ -43,9 +41,42 @@ app.post('/interactions', async function (req, res) {
      */
     if (type === InteractionType.APPLICATION_COMMAND) {
         const { name } = data;
+        
+        // TODO actually design a good looking message to send
+        if (name == 'list' && id) {
+            const productData = await sqlDB.getDataByUser(userID);
+            // sends a pending message
+            // await DiscordRequest(`interactions/${id}/${token}/callback`, {
+            //     method: 'POST', body: {
+            //         type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+            //         flags: 6,
+            //     }
+            // });
+            
+            // updates the loading message with a subsription confirmation
+            // await DiscordRequest(`webhooks/${process.env.APP_ID}/${token}/messages/@original`, {
+            //     method: 'PATCH', body:
+            //     {
+            //         content: `<@${userID}> Here are the list of your products`,
+            //         components: [
+            //             {
+            //                 type: MessageComponentTypes.ACTION_ROW,
+            //                 components: [
+            //                     {
+            //                         type: MessageComponentTypes.BUTTON,
+            //                         style: ButtonStyleTypes.LINK,
+            //                         label: 'Link to product',
+            //                         url: url,
+            //                     },
+            //                 ],
+            //             },
+            //         ],
+            //     },
+            // });
+        }
 
         // price reminder command
-        if (name == 'pricereminder' && id) {
+        if (name == 'subscribe' && id) {
             const url = req.body.data.options[0].value;
             
             // sends a pending message
