@@ -62,13 +62,13 @@ export class DatabaseClient {
     }
 
     // Function to delete a product record
-    async deleteData(userID, productName, url) {
+    async deleteData(userID, productName) {
         const client = await this.pool.connect();
 
         try {
             const query = `
                 DELETE FROM productRecords
-                WHERE userid = $1 AND productname = $2 AND link = $3;
+                WHERE userid = $1 AND productname = $2;
             `;
 
             const values = [userID, productName, url];

@@ -42,17 +42,17 @@ app.post('/interactions', async function (req, res) {
     if (type === InteractionType.APPLICATION_COMMAND) {
         const { name } = data;
         
-        // TODO actually design a good looking message to send
         if (name == 'list' && id) {
             const productData = await sqlDB.getDataByUser(userID);
             // sends a pending message
-            // await DiscordRequest(`interactions/${id}/${token}/callback`, {
-            //     method: 'POST', body: {
-            //         type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-            //         flags: 6,
-            //     }
-            // });
+            await DiscordRequest(`interactions/${id}/${token}/callback`, {
+                method: 'POST', body: {
+                    type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+                    flags: 6,
+                }
+            });
             
+            // TODO actually design a good looking message to send
             // updates the loading message with a subsription confirmation
             // await DiscordRequest(`webhooks/${process.env.APP_ID}/${token}/messages/@original`, {
             //     method: 'PATCH', body:
@@ -73,6 +73,26 @@ app.post('/interactions', async function (req, res) {
             //         ],
             //     },
             // });
+        }
+
+        // unsubscribe a product
+        if (name == 'unsubscribe' && id) {
+            // sends a pending message
+            await DiscordRequest(`interactions/${id}/${token}/callback`, {
+                method: 'POST', body: {
+                    type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+                    flags: 6,
+                }
+            });
+            
+            // TODO add a pull down menu UI so the user can choose which product to delete
+            await DiscordRequest(`webhooks/${process.env.APP_ID}/${token}/messages/@original`, {
+                method: 'PATCH', body: {
+                    content: 'choose to delete',
+                    flag: InteractionResponseFlags.EPHEMERAL,
+                }
+            })
+
         }
 
         // price reminder command
